@@ -1,8 +1,27 @@
 document.getElementById('generate')
-    .addEventListener("click", generateIVA);
+    .addEventListener("click", () => {
+        let iva = generateIVA();
+        document.getElementById('fiscalCode').value = iva;
+        copyToClipboard(iva);
+    });
 
 document.getElementById('generateFC')
-    .addEventListener("click", generateFiscalCode);
+    .addEventListener("click", () => {
+        let fiscalCode = generateFiscalCode();
+        document.getElementById('fiscalCode').value = fiscalCode;
+        copyToClipboard(fiscalCode);
+    });
+
+document.getElementById('generatePhoneNumber')
+    .addEventListener("click", () => {
+        let phone = generatePhoneNumber();
+        document.getElementById('fiscalCode').value = phone;
+        copyToClipboard(phone);
+    });
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+}
 
 let map = {
     "0": 1,
@@ -78,7 +97,7 @@ function validateFiscalCode(e) {
 
     let s = 0;
     if (fiscalCode.length != 16) {
-        console.log('false')
+        console.log('maior=', fiscalCode)
         return false;
     }
 
@@ -111,9 +130,9 @@ function validateFiscalCode(e) {
     console.log('c=', c);
 
     if (fiscalCode[15] == c)
-        console.log('valido');
+        console.log('valid');
     else
-        console.log('invalido');
+        console.log('invalid');
 }
 
 function generateFiscalCode() {
@@ -147,33 +166,29 @@ function generateFiscalCode() {
         'X',
         'Z',
     ]
-    // SSSSS00S00SS000S
-    for (let i = 0; i < 5; i++) {
-        let randon = Math.floor(Math.random() * (localAlphabet.length));
+    // SSSSSS00S00S000S
+    for (let i = 0; i < 6; i++) {
+        let randon = Math.floor(Math.random() * (localAlphabet.length - 1));
         fiscalCode += localAlphabet[randon];
     }
 
     fiscalCode += Math.floor(Math.random() * 10);
     fiscalCode += Math.floor(Math.random() * 10);
 
-    let randon = Math.floor(Math.random() * (localAlphabet.length));
+    let randon = Math.floor(Math.random() * (localAlphabet.length - 1));
     fiscalCode += localAlphabet[randon];
 
     fiscalCode += Math.floor(Math.random() * 10);
     fiscalCode += Math.floor(Math.random() * 10);
 
-    randon = Math.floor(Math.random() * (localAlphabet.length));
+    randon = Math.floor(Math.random() * (localAlphabet.length - 1));
     fiscalCode += localAlphabet[randon];
-    randon = Math.floor(Math.random() * (localAlphabet.length));
-    fiscalCode += localAlphabet[randon];
-
 
     for (let i = 0; i < 3; i++) {
         fiscalCode += Math.floor(Math.random() * 10);
     }
 
     fiscalCode = fiscalCode.trim();
-    // NAQTU98U02BW206Z
 
     let s = 0;
     for (let i = 0; i <= 15; i = i + 2) {
@@ -198,15 +213,14 @@ function generateFiscalCode() {
 
     let r = s % 26;
 
-    let c = localAlphabet[r];
-    document.getElementById('fiscalCode').value = fiscalCode + c;
+    let c = alphabet[r];
 
-    validateFiscalCode(fiscalCode + c)
+    return fiscalCode + c;
 }
 
-function validateIVA() {
+function validateIVA(e) {
 
-    let fiscalCode = document.getElementById("fiscalCode").value.trim();
+    let fiscalCode = e;
     console.log('fc=', fiscalCode)
 
     let s = 0;
@@ -226,21 +240,23 @@ function validateIVA() {
     let r = s % 10;
     let c = parseInt(fiscalCode[10]);
 
-    let result = 'inválido';
+    let result = 'invalid';
     if (r == 0 && c == 0)
-        result = 'valido'
+        result = 'valid'
     else if (10 - r == c)
-        result = 'valido'
+        result = 'valid'
 
-    document.getElementById('isValid').textContent = result;
+    console.log('IVA: ', result);
 }
 
 function generateIVA() {
 
     let initial = '';
+
     for (let i = 0; i < 10; i++) {
         initial += Math.floor(Math.random() * 10);
     }
+
     initial = initial.trim();
 
     let s = 0;
@@ -263,5 +279,13 @@ function generateIVA() {
 
     let generateFiscalCode = initial + c;
 
-    document.getElementById('fiscalCode').value = generateFiscalCode;
+    return generateFiscalCode;
+}
+
+function generatePhoneNumber() {
+    let min = 111111111;
+    let max = 999999999;
+    let rand = Math.floor(Math.random() * (max - min + 1)) + min;
+    let newNumber = '393' + rand;
+    return newNumber;
 }
