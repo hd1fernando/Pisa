@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Fiscal Code Generator",
+    "description": "Generate a valid fiscal code",
+    "version": "0.1.0",
+    "permissions": [
+        "storage"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
